@@ -4,14 +4,15 @@ from .models import Book, Author
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'status')
+    list_display = ('title', 'author', 'status', 'borrower')
+    list_filter = ('status', 'borrower')
 
     fieldsets = (
         ('Book Information', {
             'fields': ('title', 'author')
         }),
         ('Availability', {
-            'fields': ('quantity', 'status')
+            'fields': ('status', 'borrower')
         }),
     )
 

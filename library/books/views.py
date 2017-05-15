@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views import generic
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Book, Author
 
@@ -23,9 +24,21 @@ def index(request):
     )
 
 
-class BookListView(generic.ListView):
+class BookListView(generic.ListView, LoginRequiredMixin):
+    login_url = '/login/'
+    redirect_field_name = 'redirect_to'
+
     model = Book
 
     def get_queryset(self):
         return Book.objects.filter(title__icontains='war')[:5]
+
+
+class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
+    model = Book
+    template_name = 'books/book_list_borrowed_user.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Book.objects.filter(borrower=self.request.user).filter(status__exact=0)
 

@@ -1,0 +1,18 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Borrowed books</h1>
+
+    {% if book_list %}
+    <ul>
+      {% for book in book_list %}
+      <li class="{% if book.status is 0 %}text-danger{% endif %}">
+        <a href="{% url 'book-detail' book.book.pk %}">{{book.book.title}}</a> ({{ book.status }})
+      </li>
+      {% endfor %}
+    </ul>
+
+    {% else %}
+      <p>There are no books borrowed.</p>
+    {% endif %}
+{% endblock %}
